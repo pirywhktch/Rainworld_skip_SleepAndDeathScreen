@@ -1,0 +1,28 @@
+ehh, just some 2 am vibe coded slop more to learn bout what in the even bepinex is even  like
+more so than the wiki kinda did, damn figuring out we need PUBLIC-Assembly-CSharp.dll was a pain.
+
+kay so all this dinky does is disable da whole SleepAndDeathScreen completly cuz damn 
+after this third echo that vfx + next cycle's sleep screen cuz new karma yay, seems 
+like the left karma circle just goes sligtly more more opaque for a sec then audible irl relay click
+something, lights out, 
+>was playing RW
+>got to the chamber finnalyl
+>sleep.jpg
+*click*
+*whole screen black*
+screen no more
+>no
+(but it refused)
+
+so of course took out the trusty old flea market pcie extender cable , GT9400, swiched monitors output, and in glorious 768p:
+amd encountered an problem and entered safe mode untill computer restart
+dang rx570,
+but while on (gt9400) it , before adhd pacience to restart, might as well try our favourite (checks) 2D survival platformer on it 
+and god damn the frames per second aint per second but who cares, quickly devtool'd 'O' + 'Q' 'd som food pips to restart the chamber
+and low and behold the gradient, with the exit/continue buttons still grayed out,and no sfx audible, getting more opaque and opaque,
+from the already struggling now straight barely holding togheter stuttering it just hangs there now huh, yeah so its an softlock too 
+maybe its this dinky gog game install who cares ,
+
+anyways passages gone lololo
+
+(oh and for exiting you really wanna use that 30 sec start window )

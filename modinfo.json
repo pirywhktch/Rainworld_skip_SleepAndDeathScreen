@@ -1,0 +1,11 @@
+{
+    "id": "watcherfix",
+    "name": "Disable SleepAndDeathScreen/Watcher Fix",
+    "version": "1.0",
+
+
+    "description": "small patch for the softlock/complete video driver crash caused by watcher's campaign sleep screen's thunder/shake whatever vfx (by removing the whole screen of course)",
+   
+
+    "tags": ["Game Mechanics"]
+}
