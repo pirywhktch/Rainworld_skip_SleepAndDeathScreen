@@ -1,0 +1,85 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: Menu.DialogNotify
+// Assembly: Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+// MVID: 90DCF104-FBDF-4D42-B147-5089D56AF681
+// Assembly location: I:\Rain World\RainWorld_Data\Managed\Assembly-CSharp.dll
+
+using UnityEngine;
+
+#nullable disable
+namespace Menu;
+
+public class DialogNotify : Dialog
+{
+  protected SimpleButton okButton;
+  private System.Action onOK;
+  public float timeOut;
+
+  public DialogNotify(string description, ProcessManager manager, bool longLabel = false)
+    : base(description, manager, longLabel)
+  {
+  }
+
+  public DialogNotify(string description, Vector2 size, ProcessManager manager)
+    : base(description, size, manager)
+  {
+  }
+
+  public DialogNotify(string description, ProcessManager manager, System.Action onOK)
+    : base(description, manager)
+  {
+    this.Init(onOK);
+  }
+
+  public DialogNotify(string description, Vector2 size, ProcessManager manager, System.Action onOK)
+    : base(description, size, manager)
+  {
+    this.Init(onOK);
+  }
+
+  public DialogNotify(
+    string longDescription,
+    string title,
+    Vector2 size,
+    ProcessManager manager,
+    System.Action onOK,
+    bool longLabel = false)
+    : base(longDescription, title, size, manager, longLabel)
+  {
+    this.Init(onOK);
+  }
+
+  public override void Update()
+  {
+    base.Update();
+    if (this.okButton == null)
+      return;
+    this.timeOut -= 0.025f;
+    if ((double) this.timeOut < 0.0)
+    {
+      this.timeOut = 0.0f;
+      this.okButton.buttonBehav.greyedOut = false;
+    }
+    else
+      this.okButton.buttonBehav.greyedOut = true;
+  }
+
+  public override void Singal(MenuObject sender, string message)
+  {
+    switch (message)
+    {
+      case "OK":
+        if (this.onOK != null)
+          this.onOK();
+        this.manager.StopSideProcess((MainLoopProcess) this);
+        break;
+    }
+  }
+
+  private void Init(System.Action onOK)
+  {
+    this.onOK = onOK;
+    this.okButton = new SimpleButton((Menu.Menu) this, (MenuObject) this.pages[0], this.Translate("ok"), "OK", new Vector2(this.pos.x + (float) (((double) this.size.x - 110.0) * 0.5), this.pos.y + Mathf.Max(this.size.y * 0.04f, 7f)), new Vector2(110f, 30f));
+    this.pages[0].subObjects.Add((MenuObject) this.okButton);
+  }
+}
