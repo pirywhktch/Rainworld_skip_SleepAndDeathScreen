@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{1410D889-480B-43FA-A180-EEBE3887B30F}|ClassLibrary1.csproj|solutionrelative:class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1410D889-480B-43FA-A180-EEBE3887B30F}|ClassLibrary1.csproj|C:\\Users\\user\\source\\repos\\ClassLibrary1\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1410D889-480B-43FA-A180-EEBE3887B30F}|ClassLibrary1.csproj|c:\\users\\user\\source\\repos\\classlibrary1\\comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1410D889-480B-43FA-A180-EEBE3887B30F}|ClassLibrary1.csproj|solutionrelative:comment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -21,15 +21,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{c6f34f0d-7ae5-4f3a-be61-fe0c21ae9eb8}"
             },
             {
               "$type": "Document",
@@ -41,7 +37,8 @@
               "RelativeToolTip": "COMMENT.cs",
               "ViewState": "AgIAAJAAAAAAAAAAAAAiwLgAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-22T13:03:13.262Z"
+              "WhenOpened": "2026-06-22T13:03:13.262Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -49,9 +46,9 @@
               "Title": "Class1.cs",
               "DocumentMoniker": "C:\\Users\\user\\source\\repos\\ClassLibrary1\\Class1.cs",
               "RelativeDocumentMoniker": "Class1.cs",
-              "ToolTip": "C:\\Users\\user\\source\\repos\\ClassLibrary1\\Class1.cs*",
-              "RelativeToolTip": "Class1.cs*",
-              "ViewState": "AgIAADkAAAAAAAAAAAAowFYAAABTAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\user\\source\\repos\\ClassLibrary1\\Class1.cs",
+              "RelativeToolTip": "Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-22T12:39:21.276Z",
               "EditorCaption": ""

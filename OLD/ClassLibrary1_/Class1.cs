@@ -12,7 +12,6 @@ public class WatcherFix : BaseUnityPlugin
     // GLOBAL FLAGS
     private static bool wantShowDialog = false;
     private static bool wantContinue = false;
-    private static bool wantPassage = false;
     private static bool wantExitMenu = false;
     private static bool wantExitGame = false;
     private bool initialized;
@@ -32,11 +31,6 @@ public class WatcherFix : BaseUnityPlugin
     }
     public void OnEnable()
     {
-
- //       ProcessManager.ProcessID.FastTravelScreen
- //       ProcessManager.ProcessID.IntroRoll;
- //       ProcessManager.ProcessID.WarpFastTravelScreen;
-
         On.RainWorld.OnModsInit += RainWorld_OnModsInit;
 
         Options = new WatcherFixOptions();
@@ -78,22 +72,8 @@ public class WatcherFix : BaseUnityPlugin
                 }
                 Logger.LogInfo("WATCHERFIX: Intercepted SleepScreen but the enable mod toggle said no");
             }
-            
-            // --- skip intro cutscene
-            if ((next == ProcessManager.ProcessID.IntroRoll )|| (next == ProcessManager.ProcessID.Initialization))
-            {
-                if (WatcherFix.Options.SkipIntro.Value)
-                {
-                    Logger.LogInfo("WATCHERFIX: Intercepted IntroRoll → skipping");
-                    Logger.LogInfo(next);
-                    orig(self, ProcessManager.ProcessID.MainMenu);
-                    return;
 
-                }
-                Logger.LogInfo("WATCHERFIX: Intercepted intro but the toggle said no");
-            }
-                     
-                orig(self, next);
+            orig(self, next);
         };
 
         // --- FRAME UPDATE ---
@@ -122,15 +102,9 @@ public class WatcherFix : BaseUnityPlugin
                 "next cycle?",
                 pm,
                 () => { wantContinue = true; },
-                () => { wantPassage  = true; },
                 () => { wantExitMenu = true; },
                 () => { wantExitGame = true; }
             ));
-        }
-        if (wantPassage && pm.currentMainLoop is Menu.MainMenu)
-        {
-            wantPassage = false;
-            pm.RequestMainProcessSwitch(ProcessManager.ProcessID.FastTravelScreen);
         }
 
         // CONTINUE → do nothing (skip already happened)
@@ -144,18 +118,7 @@ public class WatcherFix : BaseUnityPlugin
 
 
         }
-        if (wantPassage)
-        {
 
-            wantPassage = false;
-            pm.currentMainLoop.framesPerSecond = 60;
-            Logger.LogInfo("WATCHERFIX: CONTINUE pressed");
-            pm.RequestMainProcessSwitch(ProcessManager.ProcessID.MainMenu);
-            wantPassage = true; 
-
-
-
-        }
         // EXIT TO MENU
         if (wantExitMenu)
         {
@@ -163,7 +126,6 @@ public class WatcherFix : BaseUnityPlugin
             pm.currentMainLoop.framesPerSecond = 60;
             Logger.LogInfo("WATCHERFIX: EXIT TO MENU pressed");
             pm.RequestMainProcessSwitch(ProcessManager.ProcessID.MainMenu);
-
         }
 
         // EXIT GAME
@@ -181,13 +143,11 @@ public class WatcherFixOptions : OptionInterface
 {
     //BUTTON INIT
     public Configurable<bool> SkipSleepScreen;
-    public Configurable<bool> SkipIntro;
     public Configurable<bool> EnableMod;
     //BUTTON BIND
     public WatcherFixOptions()
     {
         SkipSleepScreen = config.Bind("skip_sleep", true);
-        SkipIntro = config.Bind("skip_intro", true);
         EnableMod = config.Bind("enable_mod", true);
     }
 
@@ -214,7 +174,7 @@ public class WatcherFixOptions : OptionInterface
         Tabs[0].AddItems(new UIelement[]
         {
         new OpCheckBox(EnableMod, new Vector2(x, y)),
-        new OpLabel(new Vector2(x + 30f, y), new Vector2(300, 30), "Enable Skipping")
+        new OpLabel(new Vector2(x + 30f, y), new Vector2(300, 30), "Enable Mod")
         });
         y -= step;
 
@@ -222,15 +182,7 @@ public class WatcherFixOptions : OptionInterface
         Tabs[0].AddItems(new UIelement[]
         {
         new OpCheckBox(SkipSleepScreen, new Vector2(x, y)),
-        new OpLabel(new Vector2(x + 30f, y), new Vector2(300, 30), "Enable optional new Sleep Dialog")
-        });
-        y -= step;
-
-        // Enable Sleep Dialog
-        Tabs[0].AddItems(new UIelement[]
-        {
-        new OpCheckBox(SkipIntro, new Vector2(x, y)),
-        new OpLabel(new Vector2(x + 30f, y), new Vector2(300, 30), "Skip starting intro roll/game load")
+        new OpLabel(new Vector2(x + 30f, y), new Vector2(300, 30), "Enable Sleep Dialog")
         });
         y -= step;
     }
@@ -241,11 +193,9 @@ public class WatcherFixOptions : OptionInterface
 public class DialogSleep : Dialog
 {
     protected SimpleButton continueButton;
-    protected SimpleButton passageButton;
     protected SimpleButton exitMenuButton;
     protected SimpleButton exitGameButton;
 
-    public System.Action onPassage;
     public System.Action onContinue;
     public System.Action onExitMenu;
     public System.Action onExitGame;
@@ -253,22 +203,21 @@ public class DialogSleep : Dialog
     public float timeOut;
 
     public DialogSleep(string description, ProcessManager manager,
-        System.Action onContinue,System.Action onPassage, System.Action onExitMenu, System.Action onExitGame)
+        System.Action onContinue, System.Action onExitMenu, System.Action onExitGame)
         : base(description, manager)
     {
-        Init(onContinue,onPassage, onExitMenu, onExitGame);
+        Init(onContinue, onExitMenu, onExitGame);
     }
 
-    private void Init(System.Action onContinue, System.Action onPassage, System.Action onExitMenu, System.Action onExitGame)
+    private void Init(System.Action onContinue, System.Action onExitMenu, System.Action onExitGame)
     {
         this.onContinue = onContinue;
         this.onExitMenu = onExitMenu;
         this.onExitGame = onExitGame;
-        this.onPassage = onPassage;
+
         float w = 110f;
         float h = 30f;
         float spacing = 20f;
-        float multiplier = 0f;
 
         float totalWidth = 3 * w + 2 * spacing;
         float left = pos.x + (size.x - totalWidth) / 2;
@@ -276,36 +225,24 @@ public class DialogSleep : Dialog
 
         continueButton = new SimpleButton(
             this, pages[0], Translate("CONTINUE"), "CONTINUE",
-            new Vector2(left+ (w + spacing)*multiplier,  y),
+            new Vector2(left, y),
             new Vector2(w, h)
         );
         pages[0].subObjects.Add(continueButton);
-        multiplier += 1f;
 
-      /*  passageButton = new SimpleButton(
-            this, pages[0], Translate("PASSAGE"), "PASSAGE",
-            new Vector2(left + (w + spacing) * multiplier, y),
-            new Vector2(w, h)
-        );
-        pages[0].subObjects.Add(passageButton);
-        multiplier += 1f;
-      */
         exitMenuButton = new SimpleButton(
             this, pages[0], Translate("EXIT MENU"), "EXITMENU",
-            new Vector2(left +(w + spacing) * multiplier, y),
+            new Vector2(left + w + spacing, y),
             new Vector2(w, h)
         );
         pages[0].subObjects.Add(exitMenuButton);
-        multiplier += 1f;
 
         exitGameButton = new SimpleButton(
             this, pages[0], Translate("EXIT GAME"), "EXITGAME",
-            new Vector2(left +(w + spacing) * multiplier, y),
+            new Vector2(left + 2 * (w + spacing), y),
             new Vector2(w, h)
         );
         pages[0].subObjects.Add(exitGameButton);
-        multiplier += 1f;
-
     }
 
 
@@ -329,11 +266,6 @@ public class DialogSleep : Dialog
         {
             case "CONTINUE":
                 onContinue?.Invoke();
-                manager.StopSideProcess(this);
-                break;
-
-            case "PASSAGE":
-                onPassage?.Invoke();
                 manager.StopSideProcess(this);
                 break;
 
